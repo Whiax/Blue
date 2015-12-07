@@ -14,7 +14,7 @@ vector<string> listeFichier()
 
 	//Prend les fichiers un à un
 	DIR *rep;
-	rep = opendir("./");
+	rep = opendir("./datas/");
 	struct dirent *lecture;
 	while((lecture = readdir(rep)))
 	{
@@ -27,6 +27,9 @@ vector<string> listeFichier()
 
 	}
 
+	//Affichage basique des fichiers sélectionnés
+	for(size_t i = 0; i < retour.size(); i++)
+		cout << retour[i] << endl;
 
 	//Retour
 	return retour;
