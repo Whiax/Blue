@@ -35,14 +35,40 @@ vector<string> listeFichier()
 	return retour;
 }
 
+//Lecture en binaire d'un fichier
+vector<bool> lireBinaire(string file_name)
+{
+	
+}
+
+//Crypte l'ensemble des bits
+void crypter(vector<bool>& bin)
+{
+
+}
+
+//Réécris le fichier en binaire
+void ecrireBinaire(string file_name)
+{
+
+}
 
 
-
-//fonction principale
+//Fonction principale
 void main()
 {
-	listeFichier();
+	//Récupère les fichiers à crypter
+	vector<string> files = listeFichier();
 
+	//Crypte la liste de fichier
+	for(size_t i = 0; i < files.size(); i++)
+	{
+		string file_name = files[i];
+		vector<bool> bin = lireBinaire(file_name);
+		crypter(bin);
+		ecrireBinaire(file_name);
+	}
+	
 	getchar();
 }
 
