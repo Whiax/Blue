@@ -1,45 +1,79 @@
 #include "../include/BlueFile.h"
 
-//Lis le fichier et génère le tableau de bits
+//Prépare pour la lecture
 BlueFile::BlueFile(string nom_fichier) : nom_fichier(nom_fichier)
 {
-	lireBinaire();
+	bits.reserve(BLOCK_SIZE);
+	determineTaille();
+	cout << taille;
+	fichier_lecture = NULL;
+}
+
+//Détruit les données
+BlueFile::~BlueFile()
+{
+	fichier_lecture->close();
+	delete fichier_lecture;
+}
+
+//Détermine la taille du fichier
+void BlueFile::determineTaille()
+{
+	ifstream in("datas/" + nom_fichier, ifstream::ate | ifstream::binary);
+	taille = in.tellg();
 }
 
 //Lecture en binaire d'un fichier
 void BlueFile::lireBinaire()
 {
-	ifstream fichier("datas/"+nom_fichier, ios::binary);
+	if(fichier_lecture == NULL)
+		fichier_lecture = new ifstream("datas/" + nom_fichier, ios::binary);
 
 	//lecture caractère par caractère
-	char c;
-	while(fichier >> noskipws >> c)
+	char c = '_';
+	while(bits.size() < BLOCK_SIZE && (int)fichier_lecture->tellg() != taille)
+	{
+		*fichier_lecture >> noskipws >> c;
 		//lecture bit par bit
 		for(int i = 7; i >= 0; i--)
 			bits.push_back(((c >> i) & 1));
 
+	}
+
 
 	//Affichage des bits
-	for(size_t i = 0; i < bits.size(); i++)
+	/*for(size_t i = 0; i < bits.size(); i++)
 	{
 		if(i % 8 == 0)
 			cout << endl;
 		char bit = (bits[i] ? '1' : '0');
 		cout << bit;
 	}
-	cout << endl;
+	cout << endl;*/
 }
 
+//Détecte si le fichier a fini d'être crypté
+bool BlueFile::procedureFinie()
+{
+	return (int)fichier_lecture->tellg() == taille;
+}
 
-//Crypte l'ensemble des bits
+//Crypte l'ensemble des bits courants
 void BlueFile::crypter()
 {
+
 }
 
-//Réécris le fichier en binaire
+//Décrypte l'ensemble des bits courants
+void BlueFile::decrypter()
+{
+
+}
+
+//Réécris l'ensemble des bits courants dans le fichier en binaire 
 void BlueFile::ecrireBinaire()
 {
-	ofstream fichier("datas/" + nom_fichier);
+	ofstream fichier("datas/" + nom_fichier, ios_base::app);
 	
 	//lecture des bits
 	for(size_t i = 0; i < bits.size(); i+=8)
@@ -62,4 +96,5 @@ void BlueFile::ecrireBinaire()
 			//cout << "\t = >\t" << (int)c << "\t" << c << endl;
 		}
 	}
+	bits.clear();
 }

@@ -46,8 +46,12 @@ void main()
 	{
 		string nom_fichier = fichiers[i];
 		BlueFile fichier(nom_fichier);
-		fichier.crypter();
-		fichier.ecrireBinaire();
+		do
+		{
+			fichier.lireBinaire();
+			fichier.crypter();
+			fichier.ecrireBinaire();
+		} while(!fichier.procedureFinie());
 	}
 	
 	getchar();
