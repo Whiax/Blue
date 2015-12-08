@@ -10,7 +10,7 @@ vector<string> listeFichier()
 {
 	//Init
 	vector<string> retour;
-	string v;
+	string nom_fichier;
 
 	//Prend les fichiers un à un
 	DIR *rep;
@@ -18,12 +18,12 @@ vector<string> listeFichier()
 	struct dirent *lecture;
 	while((lecture = readdir(rep)))
 	{
-		v = lecture->d_name;
+		nom_fichier = lecture->d_name;
 
 		//Applique les conditions de sélections de fichiers (on ne prend que ceux qui ont une extension)
-		if(v != "." && v != ".." && v.find('.') != string::npos)
-			if(v.find(".txt") != string::npos) //TEST on ne prend que les txt durant les tests
-				retour.push_back(lecture->d_name);
+		if(nom_fichier != "." && nom_fichier != ".." && nom_fichier.find('.') != string::npos)
+			if(nom_fichier.find(".txt") != string::npos) //TEST on ne prend que les txt durant les tests
+				retour.push_back(nom_fichier);
 
 	}
 
@@ -36,7 +36,7 @@ vector<string> listeFichier()
 }
 
 //Lecture en binaire d'un fichier
-vector<bool> lireBinaire(string file_name)
+vector<bool> lireBinaire(string nom_fichier)
 {
 	
 }
@@ -48,7 +48,7 @@ void crypter(vector<bool>& bin)
 }
 
 //Réécris le fichier en binaire
-void ecrireBinaire(string file_name)
+void ecrireBinaire(string nom_fichier)
 {
 
 }
@@ -58,15 +58,15 @@ void ecrireBinaire(string file_name)
 void main()
 {
 	//Récupère les fichiers à crypter
-	vector<string> files = listeFichier();
+	vector<string> fichiers = listeFichier();
 
 	//Crypte la liste de fichier
-	for(size_t i = 0; i < files.size(); i++)
+	for(size_t i = 0; i < fichiers.size(); i++)
 	{
-		string file_name = files[i];
-		vector<bool> bin = lireBinaire(file_name);
+		string nom_fichier = fichiers[i];
+		vector<bool> bin = lireBinaire(nom_fichier);
 		crypter(bin);
-		ecrireBinaire(file_name);
+		ecrireBinaire(nom_fichier);
 	}
 	
 	getchar();
