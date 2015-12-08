@@ -13,9 +13,19 @@ void BlueFile::lireBinaire()
 
 	//lecture caractère par caractère
 	char c;
-	while(fichier >> c)
-	{
+	while(fichier >> noskipws >> c)
 		//lecture bit par bit
+		for(int i = 7; i >= 0; i--) 
+			bits.push_back(((c >> i) & 1));
+
+	//Affichage des bits
+	for(size_t i = 0; i < bits.size(); i++)
+	{
+		if(i % 8 == 0)
+			cout << endl;
+		char c = (bits[i] ? '1' : '0');
+		cout << c;
+
 	}
 }
 
@@ -28,4 +38,7 @@ void BlueFile::crypter()
 //Réécris le fichier en binaire
 void BlueFile::ecrireBinaire()
 {
+	ofstream fichier("datas/" + nom_fichier);
+	
+	//regroupement des bits en caractère
 }
