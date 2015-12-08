@@ -1,9 +1,7 @@
-#include <iostream>
-#include <string>
-#include <vector>
 #include <dirent.h>
 
-using namespace std;
+#include "../include/BlueFile.h"
+
 
 //Fais la liste des fichiers courants
 vector<string> listeFichier()
@@ -35,25 +33,6 @@ vector<string> listeFichier()
 	return retour;
 }
 
-//Lecture en binaire d'un fichier
-vector<bool> lireBinaire(string nom_fichier)
-{
-	
-}
-
-//Crypte l'ensemble des bits
-void crypter(vector<bool>& bin)
-{
-
-}
-
-//Réécris le fichier en binaire
-void ecrireBinaire(string nom_fichier)
-{
-
-}
-
-
 //Fonction principale
 void main()
 {
@@ -64,9 +43,9 @@ void main()
 	for(size_t i = 0; i < fichiers.size(); i++)
 	{
 		string nom_fichier = fichiers[i];
-		vector<bool> bin = lireBinaire(nom_fichier);
-		crypter(bin);
-		ecrireBinaire(nom_fichier);
+		BlueFile fichier(nom_fichier);
+		fichier.crypter();
+		fichier.ecrireBinaire();
 	}
 	
 	getchar();
