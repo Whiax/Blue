@@ -7,7 +7,7 @@
 
 using namespace std;
 
-#define BLOCK_SIZE 4096
+#define BLOCK_SIZE 2048
 
 class BlueFile
 {
