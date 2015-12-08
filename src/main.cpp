@@ -26,8 +26,10 @@ vector<string> listeFichier()
 	}
 
 	//Affichage basique des fichiers sélectionnés
+	cout << "Fichiers:" << endl;
 	for(size_t i = 0; i < retour.size(); i++)
-		cout << retour[i] << endl;
+		cout << "   " << retour[i] << endl;
+	cout << "---" << endl << endl;
 
 	//Retour
 	return retour;
