@@ -7,7 +7,7 @@
 
 using namespace std;
 
-#define BLOCK_SIZE 1024
+#define BLOCK_SIZE 4096
 
 class BlueFile
 {
@@ -32,6 +32,9 @@ public:
 
 	//Détecte si le fichier a fini d'être crypté
 	bool procedureFinie();
+
+	//Affiche les bits
+	void afficherBits();
 private:
 
 	//Détermine la taille du fichier
@@ -44,5 +47,6 @@ private:
 
 	//Fichier
 	ifstream* fichier_lecture;
+	ofstream* fichier_ecriture;
 
 };

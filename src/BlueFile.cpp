@@ -4,9 +4,15 @@
 BlueFile::BlueFile(string nom_fichier) : nom_fichier(nom_fichier)
 {
 	bits.reserve(BLOCK_SIZE);
+
 	determineTaille();
-	cout << taille;
+
 	fichier_lecture = NULL;
+	fichier_ecriture = NULL;
+
+	cout << "__________/_\\__________" << endl;
+	cout << "CRYPTAGE/DECRYPTAGE DE " << nom_fichier << endl;
+	cout << "TAILLE: " << taille << endl << endl;
 }
 
 //Détruit les données
@@ -14,6 +20,7 @@ BlueFile::~BlueFile()
 {
 	fichier_lecture->close();
 	delete fichier_lecture;
+	delete fichier_ecriture;
 }
 
 //Détermine la taille du fichier
@@ -41,39 +48,55 @@ void BlueFile::lireBinaire()
 	}
 
 
-	//Affichage des bits
-	/*for(size_t i = 0; i < bits.size(); i++)
-	{
-		if(i % 8 == 0)
-			cout << endl;
-		char bit = (bits[i] ? '1' : '0');
-		cout << bit;
-	}
-	cout << endl;*/
+	
 }
 
 //Détecte si le fichier a fini d'être crypté
 bool BlueFile::procedureFinie()
 {
-	return (int)fichier_lecture->tellg() == taille;
+	bool end = (int)fichier_lecture->tellg() == taille;
+	if(end)
+	{
+
+		cout << "CRYPTAGE/DECRYPTAGE FINI" << endl;
+		cout << "__________\\_/__________" << endl << endl;
+	}
+	else
+	{
+		cout << "Progression : " << (float)fichier_lecture->tellg() / (float) taille << "%" << endl;
+	}
+	return end;
 }
 
 //Crypte l'ensemble des bits courants
 void BlueFile::crypter()
 {
-
+	//cryptage basique: inverser les bits deux à deux
+	for(size_t i = 0; i < bits.size() -1; i+=2)
+	{
+		char c1 = bits[i];
+		bits[i] = bits[i + 1];
+		bits[i + 1] = c1;
+	}
 }
 
 //Décrypte l'ensemble des bits courants
 void BlueFile::decrypter()
 {
-
+	//décryptage basique: inverser les bits deux à deux
+	for(size_t i = 0; i < bits.size() - 1; i+=2)
+	{
+		char c1 = bits[i];
+		bits[i] = bits[i + 1];
+		bits[i + 1] = c1;
+	}
 }
 
 //Réécris l'ensemble des bits courants dans le fichier en binaire 
 void BlueFile::ecrireBinaire()
 {
-	ofstream fichier("datas/" + nom_fichier, ios_base::app);
+	if(!fichier_ecriture)
+		fichier_ecriture = new ofstream("datas/" + nom_fichier);
 	
 	//lecture des bits
 	for(size_t i = 0; i < bits.size(); i+=8)
@@ -81,20 +104,26 @@ void BlueFile::ecrireBinaire()
 		//regroupement en caractère
 		char c = 0;
 		for(int j = 0; j < 8; j++)
-		{
-			int bit_value = bits[i + j];
-			c ^= (-bit_value ^ c) & (1 << (7-j));
-		}
+			c ^= (-(int)bits[i + j] ^ c) & (1 << (7 - j));
 
-		//voir si nécessaire sous LINUX
 		//si non saut de ligne spécial
 		if(c != 13)
-		{
-			fichier << c;
-
-			//Affichage
-			//cout << "\t = >\t" << (int)c << "\t" << c << endl;
-		}
+			*fichier_ecriture << c;
 	}
 	bits.clear();
+}
+
+//Affiche les bits
+void BlueFile::afficherBits()
+{
+	cout << endl << "AFFICHAGE BITS:" << endl;
+	for(size_t i = 0; i < bits.size(); i++)
+	{
+		if(i % 8 == 0)
+			cout << endl;
+		char bit = (bits[i] ? '1' : '0');
+		cout << bit;
+	}
+	cout << endl << "______" << endl << endl;
+	
 }
