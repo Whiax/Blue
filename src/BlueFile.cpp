@@ -9,6 +9,23 @@ BlueFile::BlueFile(string nom_fichier) : nom_fichier(nom_fichier)
 //Lecture en binaire d'un fichier
 void BlueFile::lireBinaire()
 {
-	ifstream fichier(nom_fichier, ios::binary);
+	ifstream fichier("datas/"+nom_fichier, ios::binary);
 
+	//lecture caractère par caractère
+	char c;
+	while(fichier >> c)
+	{
+		//lecture bit par bit
+	}
+}
+
+
+//Crypte l'ensemble des bits
+void BlueFile::crypter()
+{
+}
+
+//Réécris le fichier en binaire
+void BlueFile::ecrireBinaire()
+{
 }

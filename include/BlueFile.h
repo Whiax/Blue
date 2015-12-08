@@ -27,5 +27,6 @@ private:
 
 	string nom_fichier;
 	vector<char> bits;
+	int taille;
 
 };
