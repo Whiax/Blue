@@ -7,7 +7,7 @@
 
 using namespace std;
 
-#define BLOCK_SIZE 2048
+#define BLOCK_SIZE 1000000
 
 class BlueFile
 {
@@ -31,7 +31,7 @@ public:
 	void ecrireBinaire();
 
 	//Détecte si le fichier a fini d'être crypté
-	bool procedureFinie();
+	int procedureFinie();
 
 	//Affiche les bits
 	void afficherBits();

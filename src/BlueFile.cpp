@@ -52,20 +52,22 @@ void BlueFile::lireBinaire()
 }
 
 //Détecte si le fichier a fini d'être crypté
-bool BlueFile::procedureFinie()
+int BlueFile::procedureFinie()
 {
-	bool end = (int)fichier_lecture->tellg() == taille;
-	if(end)
-	{
+	int position = (int)fichier_lecture->tellg();
+	bool end = position == taille;
 
-		cout << "CRYPTAGE/DECRYPTAGE FINI" << endl;
-		cout << "__________\\_/__________" << endl << endl;
-	}
+	//message de fin / progression
+	if(end)
+		cout << "CRYPTAGE/DECRYPTAGE FINI" << endl << "__________\\_/__________" << endl << endl;
 	else
-	{
 		cout << "Progression : " << (float)fichier_lecture->tellg() / (float) taille << "%" << endl;
-	}
-	return end;
+
+	if(end)
+		return 1;
+	else if(position == -1)
+		return -1;
+	else return 0;
 }
 
 //Crypte l'ensemble des bits courants
@@ -96,7 +98,7 @@ void BlueFile::decrypter()
 void BlueFile::ecrireBinaire()
 {
 	if(!fichier_ecriture)
-		fichier_ecriture = new ofstream("datas/" + nom_fichier);
+		fichier_ecriture = new ofstream("datas/" + nom_fichier,   ios::binary);
 	
 	//lecture des bits
 	for(size_t i = 0; i < bits.size(); i+=8)
@@ -107,8 +109,7 @@ void BlueFile::ecrireBinaire()
 			c ^= (-(int)bits[i + j] ^ c) & (1 << (7 - j));
 
 		//si non saut de ligne spécial
-		if(c != 13)
-			*fichier_ecriture << c;
+		*fichier_ecriture << c;
 	}
 	bits.clear();
 }
