@@ -12,7 +12,7 @@ vector<string> listeFichier()
 
 	//Prend les fichiers un à un
 	DIR *rep;
-	rep = opendir("./datas/");
+	rep = opendir("./" DOSSIER_EFFECTIF  "/ ");
 	struct dirent *lecture;
 	while((lecture = readdir(rep)))
 	{
@@ -21,6 +21,7 @@ vector<string> listeFichier()
 		//Applique les conditions de selections de fichiers (on ne prend que ceux qui ont une extension)
 		if(nom_fichier != "." && nom_fichier != ".." && nom_fichier.find('.') != string::npos)
 			//if(nom_fichier.find(".txt") != string::npos) //TEST on ne prend que les txt durant les tests
+			if(nom_fichier != "Blue.exe") //Conditions de nom
 				retour.push_back(nom_fichier);
 
 	}

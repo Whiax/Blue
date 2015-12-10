@@ -7,7 +7,8 @@
 
 using namespace std;
 
-#define BLOCK_SIZE 1000000
+#define BLOCK_SIZE 500000000
+#define DOSSIER_EFFECTIF "."
 
 class BlueFile
 {

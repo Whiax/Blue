@@ -26,7 +26,7 @@ BlueFile::~BlueFile()
 //Détermine la taille du fichier
 void BlueFile::determineTaille()
 {
-	ifstream in("datas/" + nom_fichier, ifstream::ate | ifstream::binary);
+	ifstream in("" DOSSIER_EFFECTIF "/" + nom_fichier, ifstream::ate | ifstream::binary);
 	taille = in.tellg();
 }
 
@@ -34,7 +34,7 @@ void BlueFile::determineTaille()
 void BlueFile::lireBinaire()
 {
 	if(fichier_lecture == NULL)
-		fichier_lecture = new ifstream("datas/" + nom_fichier, ios::binary);
+		fichier_lecture = new ifstream("" DOSSIER_EFFECTIF "/" + nom_fichier, ios::binary);
 
 	//lecture caractère par caractère
 	char c = '_';
@@ -98,7 +98,7 @@ void BlueFile::decrypter()
 void BlueFile::ecrireBinaire()
 {
 	if(!fichier_ecriture)
-		fichier_ecriture = new ofstream("datas/" + nom_fichier,   ios::binary);
+		fichier_ecriture = new ofstream("" DOSSIER_EFFECTIF "/" + nom_fichier,   ios::binary);
 	
 	//lecture des bits
 	for(size_t i = 0; i < bits.size(); i+=8)
