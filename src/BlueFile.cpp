@@ -19,6 +19,7 @@ BlueFile::BlueFile(string nom_fichier) : nom_fichier(nom_fichier)
 BlueFile::~BlueFile()
 {
 	fichier_lecture->close();
+	fichier_ecriture->close();
 	delete fichier_lecture;
 	delete fichier_ecriture;
 }
