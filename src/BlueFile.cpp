@@ -62,7 +62,7 @@ int BlueFile::procedureFinie()
 	if(end)
 		cout << "CRYPTAGE/DECRYPTAGE FINI" << endl << "__________\\_/__________" << endl << endl;
 	else
-		cout << "Progression : " << (float)fichier_lecture->tellg() / (float) taille << "%" << endl;
+		cout << "Progression : " << (float)position / (float) taille << "%" << endl;
 
 	if(end)
 		return 1;
