@@ -51,3 +51,6 @@ private:
 	ofstream* fichier_ecriture;
 
 };
+
+
+//Whiax

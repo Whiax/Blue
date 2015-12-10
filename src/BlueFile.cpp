@@ -128,3 +128,5 @@ void BlueFile::afficherBits()
 	cout << endl << "______" << endl << endl;
 	
 }
+
+//Whiax
