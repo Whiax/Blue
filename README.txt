@@ -2,6 +2,9 @@
 
 
 Simple logiciel de cryptage
+____________________________
+
+
 -Mettre l'exécutable dans le dossier contenant les fichiers à crypter
 
 -Mettre un fichier bluedoor.txt (implémenté) contenant la clé de cryptage pour crypter les fichiers à la racine (non implémenté)
