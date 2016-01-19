@@ -7,9 +7,9 @@
 
 using namespace std;
 
-#define TAILLE_BLOC 2048
+#define TAILLE_BLOC 4096
 #define TAILLE_BLOC_OCTET TAILLE_BLOC*8
-#define DOSSIER_EFFECTIF "datas"
+#define DOSSIER_EFFECTIF "."
 
 class BlueFile
 {
