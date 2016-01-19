@@ -52,6 +52,58 @@ void afficherInstructions()
 
 }
 
+//Renvoit les clés de chiffrement des fichiers door et key
+vector<vector<char>> recupererCle(string nom_fichier_door, string nom_fichier_key)
+{
+	//Initialisation
+	vector<vector<char>> cles_de_chiffrement;
+
+	//Porte
+	if(nom_fichier_door != "")
+	{
+		cout << "./" DOSSIER_EFFECTIF  "/ " + nom_fichier_door << endl;
+		ifstream fichier_door("./" DOSSIER_EFFECTIF  "/" +nom_fichier_door, ios::binary);
+		vector<char> serrure;
+		char c = '_';
+		while(!fichier_door.eof())
+		{
+			fichier_door >> noskipws >> c;
+			//lecture bit par bit
+			if(!fichier_door.eof())
+				for(int i = 7; i >= 0; i--)
+					serrure.push_back(((c >> i) & 1));
+
+		}
+		cles_de_chiffrement.push_back(serrure);
+		fichier_door.close();
+	}
+	
+
+	//Clé
+	if(nom_fichier_key != "")
+	{
+		ifstream fichier_key("./" DOSSIER_EFFECTIF  "/" + nom_fichier_key, ios::binary);
+		vector<char> cle;
+		char c = '_';
+		while(!fichier_key.eof())
+		{
+			fichier_key >> noskipws >> c;
+			//lecture bit par bit
+			if(!fichier_key.eof())
+				for(int i = 7; i >= 0; i--)
+					cle.push_back(((c >> i) & 1));
+
+		}
+		cles_de_chiffrement.push_back(cle);
+		fichier_key.close();
+	}
+	
+
+
+	//Retour
+	return cles_de_chiffrement;
+}
+
 //Fonction principale
 void main()
 {
@@ -63,6 +115,9 @@ void main()
 	vector<string>::iterator position_key = find(fichiers.begin(), fichiers.end(), "bluekey.txt");
 	bool crypter = position_door != fichiers.end();
 	bool decrypter = position_key != fichiers.end();
+
+	//Récupère les clés de chiffrement
+	vector<vector<char>> cles = recupererCle(crypter ? *position_door : "", decrypter ? *position_key : "");
 	
 	//Supprime les fichiers door et key de la liste des fichiers
 	if(crypter)
@@ -73,6 +128,8 @@ void main()
 	//Si aucun des fichiers n'est present
 	if(!crypter && !decrypter)
 		afficherInstructions();
+
+
 	
 
 	//Sinon Crypte/Decrypte la liste de fichier
