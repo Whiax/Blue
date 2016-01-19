@@ -7,7 +7,7 @@
 
 using namespace std;
 
-#define TAILLE_BLOC 1024
+#define TAILLE_BLOC 2048
 #define TAILLE_BLOC_OCTET TAILLE_BLOC*8
 #define DOSSIER_EFFECTIF "datas"
 
