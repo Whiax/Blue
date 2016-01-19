@@ -64,7 +64,7 @@ void main()
 	bool crypter = position_door != fichiers.end();
 	bool decrypter = position_key != fichiers.end();
 	
-	//Supprime les fichiers door et key
+	//Supprime les fichiers door et key de la liste des fichiers
 	if(crypter)
 		fichiers.erase(position_door);
 	if(decrypter)
@@ -75,22 +75,34 @@ void main()
 		afficherInstructions();
 	
 
-	//Crypte/Decrypte la liste de fichier
+	//Sinon Crypte/Decrypte la liste de fichier
 	else
+	{
+		//Si on souhaite décrypter des fichiers, on ne décrypte que les .bluecrypt
+		if(decrypter)
+		{
+			for(int i = fichiers.size() - 1; i >= 0; --i)
+			{
+				string nom_fichier = fichiers[i];
+				if(nom_fichier.find(".bluecrypt") == string::npos)
+					fichiers.erase(fichiers.begin() + i);
+			}
+		}
+
+		//On parcourt et on opère sur la liste des fichiers
 		for(size_t i = 0; i < fichiers.size(); i++)
 		{
 			string nom_fichier = fichiers[i];
-			BlueFile fichier(nom_fichier);
+			BlueFile fichier(nom_fichier, crypter, decrypter);
 			do
 			{
 				fichier.lireBinaire();
-				if(crypter)
-					fichier.crypter();
-				if(decrypter)
-					fichier.decrypter();
+				fichier.operer();
 				fichier.ecrireBinaire();
 			} while(!fichier.procedureFinie());
 		}
+	}
+		
 	
 	getchar();
 }

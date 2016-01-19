@@ -1,9 +1,10 @@
 #include "../include/BlueFile.h"
 
 //Prépare pour la lecture
-BlueFile::BlueFile(string nom_fichier) : nom_fichier(nom_fichier)
+BlueFile::BlueFile(string nom_fichier, bool cryptage, bool decryptage) : nom_fichier(nom_fichier), cryptage(cryptage), decryptage(decryptage)
 {
-	bits.reserve(BLOCK_SIZE);
+	//cryptage 
+	bits.reserve(TAILLE_BLOC_OCTET);
 
 	determineTaille();
 
@@ -11,8 +12,12 @@ BlueFile::BlueFile(string nom_fichier) : nom_fichier(nom_fichier)
 	fichier_ecriture = NULL;
 
 	cout << "__________/_\\__________" << endl;
-	cout << "CRYPTAGE/DECRYPTAGE DE " << nom_fichier << endl;
+	if(decryptage) cout << "DE";
+	cout << "CRYPTAGE DE " << nom_fichier << endl;
 	cout << "TAILLE: " << taille << endl << endl;
+
+	//analyse
+	passage = 0;
 }
 
 //Détruit les données
@@ -39,7 +44,7 @@ void BlueFile::lireBinaire()
 
 	//lecture caractère par caractère
 	char c = '_';
-	while(bits.size() < BLOCK_SIZE && (int)fichier_lecture->tellg() != taille)
+	while(bits.size() < TAILLE_BLOC_OCTET && (int)fichier_lecture->tellg() != taille)
 	{
 		*fichier_lecture >> noskipws >> c;
 		//lecture bit par bit
@@ -49,7 +54,7 @@ void BlueFile::lireBinaire()
 	}
 
 
-	
+	passage++;
 }
 
 //Détecte si le fichier a fini d'être crypté
@@ -62,7 +67,7 @@ int BlueFile::procedureFinie()
 	if(end)
 		cout << "CRYPTAGE/DECRYPTAGE FINI" << endl << "__________\\_/__________" << endl << endl;
 	else
-		cout << "Progression : " << (float)position / (float) taille << "%" << endl;
+		cout << passage << " : Progression : " << (float)position / (float)taille * 100.f << "%" << endl;
 
 	if(end)
 		return 1;
@@ -95,11 +100,27 @@ void BlueFile::decrypter()
 	}
 }
 
+//Opère l'opération souhaitée
+void BlueFile::operer()
+{
+	if(cryptage)
+		crypter();
+	if(decryptage)
+		decrypter();
+}
+
 //Réécris l'ensemble des bits courants dans le fichier en binaire 
 void BlueFile::ecrireBinaire()
 {
 	if(!fichier_ecriture)
-		fichier_ecriture = new ofstream("" DOSSIER_EFFECTIF "/" + nom_fichier,   ios::binary);
+	{
+		string nom = "" DOSSIER_EFFECTIF "/" + nom_fichier;
+		if(cryptage)
+			nom += ".bluecrypt";
+		if(decryptage)
+			nom = nom.substr(0, nom.size() - (sizeof(".bluecrypt")-1));
+		fichier_ecriture = new ofstream(nom, ios::binary);
+	}
 	
 	//lecture des bits
 	for(size_t i = 0; i < bits.size(); i+=8)

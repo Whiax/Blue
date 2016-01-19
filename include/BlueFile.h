@@ -7,14 +7,15 @@
 
 using namespace std;
 
-#define BLOCK_SIZE 500000000
-#define DOSSIER_EFFECTIF "."
+#define TAILLE_BLOC 1024
+#define TAILLE_BLOC_OCTET TAILLE_BLOC*8
+#define DOSSIER_EFFECTIF "datas"
 
 class BlueFile
 {
 public:
 	//Prépare pour la lecture
-	BlueFile(string nom_fichier);
+	BlueFile(string nom_fichier, bool cryptage, bool decryptage);
 
 	//Détruit les données
 	~BlueFile();
@@ -28,6 +29,9 @@ public:
 	//Décrypte l'ensemble des bits
 	void decrypter();
 
+	//Opère l'opération souhaitée
+	void operer();
+
 	//Réécris le fichier en binaire
 	void ecrireBinaire();
 
@@ -36,6 +40,8 @@ public:
 
 	//Affiche les bits
 	void afficherBits();
+
+
 private:
 
 	//Détermine la taille du fichier
@@ -49,6 +55,13 @@ private:
 	//Fichier
 	ifstream* fichier_lecture;
 	ofstream* fichier_ecriture;
+
+	//Opération
+	bool cryptage;
+	bool decryptage;
+
+	//Analyse
+	int passage;
 
 };
 
