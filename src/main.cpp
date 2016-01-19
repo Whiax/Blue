@@ -59,11 +59,11 @@ vector<vector<char>> recupererCle(string nom_fichier_door, string nom_fichier_ke
 	vector<vector<char>> cles_de_chiffrement;
 
 	//Porte
+	vector<char> serrure;
 	if(nom_fichier_door != "")
 	{
 		cout << "./" DOSSIER_EFFECTIF  "/ " + nom_fichier_door << endl;
 		ifstream fichier_door("./" DOSSIER_EFFECTIF  "/" +nom_fichier_door, ios::binary);
-		vector<char> serrure;
 		char c = '_';
 		while(!fichier_door.eof())
 		{
@@ -74,16 +74,16 @@ vector<vector<char>> recupererCle(string nom_fichier_door, string nom_fichier_ke
 					serrure.push_back(((c >> i) & 1));
 
 		}
-		cles_de_chiffrement.push_back(serrure);
 		fichier_door.close();
 	}
+	cles_de_chiffrement.push_back(serrure);
 	
 
 	//Clé
+	vector<char> cle;
 	if(nom_fichier_key != "")
 	{
 		ifstream fichier_key("./" DOSSIER_EFFECTIF  "/" + nom_fichier_key, ios::binary);
-		vector<char> cle;
 		char c = '_';
 		while(!fichier_key.eof())
 		{
@@ -94,9 +94,9 @@ vector<vector<char>> recupererCle(string nom_fichier_door, string nom_fichier_ke
 					cle.push_back(((c >> i) & 1));
 
 		}
-		cles_de_chiffrement.push_back(cle);
 		fichier_key.close();
 	}
+	cles_de_chiffrement.push_back(cle);
 	
 
 
@@ -150,7 +150,7 @@ void main()
 		for(size_t i = 0; i < fichiers.size(); i++)
 		{
 			string nom_fichier = fichiers[i];
-			BlueFile fichier(nom_fichier, crypter, decrypter);
+			BlueFile fichier(nom_fichier, crypter, decrypter, cles[0], cles[1]);
 			do
 			{
 				fichier.lireBinaire();

@@ -1,7 +1,8 @@
 #include "../include/BlueFile.h"
 
 //Prépare pour la lecture
-BlueFile::BlueFile(string nom_fichier, bool cryptage, bool decryptage) : nom_fichier(nom_fichier), cryptage(cryptage), decryptage(decryptage)
+BlueFile::BlueFile(string nom_fichier, bool cryptage, bool decryptage, vector<char>& cle_cryptage, vector<char>& cle_decryptage)
+	: nom_fichier(nom_fichier), cryptage(cryptage), decryptage(decryptage), cle_cryptage(cle_cryptage), cle_decryptage(cle_decryptage)
 {
 	//cryptage 
 	bits.reserve(TAILLE_BLOC_OCTET);
@@ -82,25 +83,37 @@ int BlueFile::procedureFinie()
 //Crypte l'ensemble des bits courants
 void BlueFile::crypter()
 {
-	//cryptage basique: inverser les bits deux à deux
-	for(size_t i = 0; i < bits.size() -1; i+=2)
-	{
-		char c1 = bits[i];
-		bits[i] = bits[i + 1];
-		bits[i + 1] = c1;
-	}
+	//si on a pas de cles de chiffrement
+	if(cle_cryptage.size() == 0)
+		//cryptage basique: inverser les bits deux à deux
+		for(size_t i = 0; i < bits.size() -1; i+=2)
+		{
+			char c1 = bits[i];
+			bits[i] = bits[i + 1];
+			bits[i + 1] = c1;
+		}
+	//sinon
+	else //cryptage basique d'inversion de valeur de bit
+		for(size_t i = 0; i < bits.size(); ++i)
+			bits[i] = cle_cryptage[i % cle_cryptage.size()] ? !bits[i] : bits[i];
 }
 
 //Décrypte l'ensemble des bits courants
 void BlueFile::decrypter()
 {
-	//décryptage basique: inverser les bits deux à deux
-	for(size_t i = 0; i < bits.size() - 1; i+=2)
-	{
-		char c1 = bits[i];
-		bits[i] = bits[i + 1];
-		bits[i + 1] = c1;
-	}
+	//si on a pas de cles de chiffrement
+	if(cle_decryptage.size() == 0)
+		//décryptage basique: inverser les bits deux à deux
+		for(size_t i = 0; i < bits.size() - 1; i+=2)
+		{
+			char c1 = bits[i];
+			bits[i] = bits[i + 1];
+			bits[i + 1] = c1;
+		}
+	//sinon
+	else //decryptage basique d'inversion de valeur de bit
+		for(size_t i = 0; i < bits.size(); ++i)
+			bits[i] = cle_decryptage[i % cle_decryptage.size()] ? !bits[i] : bits[i];
 }
 
 //Opère l'opération souhaitée

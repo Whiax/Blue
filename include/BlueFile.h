@@ -15,7 +15,7 @@ class BlueFile
 {
 public:
 	//Prépare pour la lecture
-	BlueFile(string nom_fichier, bool cryptage, bool decryptage);
+	BlueFile(string nom_fichier, bool cryptage, bool decryptage, vector<char>& cle_cryptage, vector<char>& cle_decryptage);
 
 	//Détruit les données
 	~BlueFile();
@@ -67,6 +67,8 @@ private:
 	//Opération
 	bool cryptage;
 	bool decryptage;
+	vector<char>& cle_cryptage;
+	vector<char>& cle_decryptage;
 
 	//Analyse
 	int passage;
