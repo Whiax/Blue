@@ -41,11 +41,17 @@ public:
 	//Affiche les bits
 	void afficherBits();
 
+	//Supprime le fichier d'origine
+	void suppression();
+
 
 private:
 
 	//Détermine la taille du fichier
 	void determineTaille();
+
+	//Choisis le nom des fichiers
+	void creerNomsFichiers();
 
 	//Données
 	string nom_fichier;
@@ -55,6 +61,8 @@ private:
 	//Fichier
 	ifstream* fichier_lecture;
 	ofstream* fichier_ecriture;
+	string nom_lecture;
+	string nom_ecriture;
 
 	//Opération
 	bool cryptage;

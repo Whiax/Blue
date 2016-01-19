@@ -100,10 +100,12 @@ void main()
 				fichier.operer();
 				fichier.ecrireBinaire();
 			} while(!fichier.procedureFinie());
+			fichier.suppression();
 		}
 	}
 		
-	
+	//Fin du programme
+	cout << endl << "OPERATION TERMINEE" << endl << "Fermer le programme en appuyant sur entree...";
 	getchar();
 }
 

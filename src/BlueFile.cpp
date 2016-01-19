@@ -16,6 +16,9 @@ BlueFile::BlueFile(string nom_fichier, bool cryptage, bool decryptage) : nom_fic
 	cout << "CRYPTAGE DE " << nom_fichier << endl;
 	cout << "TAILLE: " << taille << endl << endl;
 
+	//noms des fichiers sources et destination
+	creerNomsFichiers();
+
 	//analyse
 	passage = 0;
 }
@@ -40,7 +43,7 @@ void BlueFile::determineTaille()
 void BlueFile::lireBinaire()
 {
 	if(fichier_lecture == NULL)
-		fichier_lecture = new ifstream("" DOSSIER_EFFECTIF "/" + nom_fichier, ios::binary);
+		fichier_lecture = new ifstream(nom_lecture, ios::binary);
 
 	//lecture caractère par caractère
 	char c = '_';
@@ -65,7 +68,7 @@ int BlueFile::procedureFinie()
 
 	//message de fin / progression
 	if(end)
-		cout << "CRYPTAGE/DECRYPTAGE FINI" << endl << "__________\\_/__________" << endl << endl;
+		cout << "OPERATION FINIE" << endl << "__________\\_/__________" << endl << endl;
 	else
 		cout << passage << " : Progression : " << (float)position / (float)taille * 100.f << "%" << endl;
 
@@ -113,14 +116,7 @@ void BlueFile::operer()
 void BlueFile::ecrireBinaire()
 {
 	if(!fichier_ecriture)
-	{
-		string nom = "" DOSSIER_EFFECTIF "/" + nom_fichier;
-		if(cryptage)
-			nom += ".bluecrypt";
-		if(decryptage)
-			nom = nom.substr(0, nom.size() - (sizeof(".bluecrypt")-1));
-		fichier_ecriture = new ofstream(nom, ios::binary);
-	}
+		fichier_ecriture = new ofstream(nom_ecriture, ios::binary);
 	
 	//lecture des bits
 	for(size_t i = 0; i < bits.size(); i+=8)
@@ -149,6 +145,28 @@ void BlueFile::afficherBits()
 	}
 	cout << endl << "______" << endl << endl;
 	
+}
+
+//Supprime le fichier d'origine
+void BlueFile::suppression()
+{
+	fichier_lecture->close();
+	
+	if(remove(nom_lecture.c_str()) != 0)
+		cout << "Impossibilite de supprimer le fichier d'origine" << endl;
+	else
+		cout << "Fichier d'origine supprime" << endl;
+}
+
+//Choisis le nom des fichiers
+void BlueFile::creerNomsFichiers()
+{
+	nom_lecture = "" DOSSIER_EFFECTIF "/" + nom_fichier;
+	nom_ecriture = "" DOSSIER_EFFECTIF "/" + nom_fichier;
+	if(cryptage)
+		nom_ecriture += ".bluecrypt";
+	if(decryptage)
+		nom_ecriture = nom_ecriture.substr(0, nom_ecriture.size() - (sizeof(".bluecrypt") - 1));
 }
 
 //Whiax
