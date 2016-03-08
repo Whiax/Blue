@@ -1,13 +1,9 @@
-# Blue
-
-
-Logiciel de chiffrement
+# Blue - Logiciel d'archivage
 ____________________________
 
+1) Mettre l'exécutable dans le dossier contenant les fichiers à archiver
 
--Mettre l'exécutable dans le dossier contenant les fichiers à crypter
+2) Mettre un fichier bluedoor.txt (contenant éventuellement une clé) pour archiver les fichiers
 
--Mettre un fichier bluedoor.txt contenant la clé de chiffrement pour chiffrement les fichiers à la racine
-
--Mettre un fichier bluekey.txt contenant la clé de chiffrement pour déchiffrer les fichiers à la racine 
+3) Mettre un fichier bluekey.txt (contenant la même clé) pour lire les fichiers 
 
