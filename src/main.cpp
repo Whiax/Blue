@@ -1,6 +1,7 @@
 #include <dirent.h>
 
 #include "../include/BlueFile.h"
+#include "../include/BlueBigFile.h"
 
 
 //Fais la liste des fichiers courants
@@ -107,6 +108,8 @@ vector<vector<char>> recupererCle(string nom_fichier_door, string nom_fichier_ke
 //Fonction principale
 void main()
 {
+	
+
 	//Recupère les fichiers à crypter/decrypter
 	vector<string> fichiers = listeFichier();
 
@@ -135,6 +138,14 @@ void main()
 	//Sinon Crypte/Decrypte la liste de fichier
 	else
 	{
+		//Si on souhaite décrypter, on commence par dégrouper les .bluecrypt
+		if(decrypter)
+		{
+			BlueBigFile big_file(cles[1]);
+			vector<string> nouveaux_bluecrypt = big_file.degenerer();
+			fichiers.insert(fichiers.end(), nouveaux_bluecrypt.begin(), nouveaux_bluecrypt.end());
+		}
+
 		//Si on souhaite décrypter des fichiers, on ne décrypte que les .bluecrypt
 		if(decrypter)
 		{
@@ -145,8 +156,9 @@ void main()
 					fichiers.erase(fichiers.begin() + i);
 			}
 		}
-
+		
 		//On parcourt et on opère sur la liste des fichiers
+		vector<string> nouveaux_noms;
 		for(size_t i = 0; i < fichiers.size(); i++)
 		{
 			string nom_fichier = fichiers[i];
@@ -158,7 +170,20 @@ void main()
 				fichier.ecrireBinaire();
 			} while(!fichier.procedureFinie());
 			fichier.suppression();
+			
+			//Si on crypte, on enregistre les nouveaux noms de fichiers
+			if(crypter)
+				nouveaux_noms.push_back(fichier.getNewName());
+
 		}
+
+		//Si on crypte on met tout dans un seul fichier
+		if(crypter)
+		{
+			BlueBigFile big_file(nouveaux_noms, cles[0]);
+			big_file.generer();
+		}
+		
 	}
 		
 	//Fin du programme

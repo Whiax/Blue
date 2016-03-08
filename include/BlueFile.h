@@ -1,15 +1,8 @@
 #pragma once
 
-#include <fstream>
-#include <string>
-#include <vector>
-#include <iostream>
+#include "Header.h"
 
-using namespace std;
 
-#define TAILLE_BLOC 4096
-#define TAILLE_BLOC_OCTET TAILLE_BLOC*8
-#define DOSSIER_EFFECTIF "."
 
 class BlueFile
 {
@@ -43,6 +36,9 @@ public:
 
 	//Supprime le fichier d'origine
 	void suppression();
+
+	//Renvoit le nom du fichier créé
+	string getNewName();
 
 
 private:

@@ -44,7 +44,7 @@ void BlueFile::determineTaille()
 void BlueFile::lireBinaire()
 {
 	if(fichier_lecture == NULL)
-		fichier_lecture = new ifstream(nom_lecture, ios::binary);
+		fichier_lecture = new ifstream("" DOSSIER_EFFECTIF "/" +  nom_lecture, ios::binary);
 
 	//lecture caractère par caractère
 	char c = '_';
@@ -129,7 +129,7 @@ void BlueFile::operer()
 void BlueFile::ecrireBinaire()
 {
 	if(!fichier_ecriture)
-		fichier_ecriture = new ofstream(nom_ecriture, ios::binary);
+		fichier_ecriture = new ofstream("" DOSSIER_EFFECTIF "/" + nom_ecriture, ios::binary);
 	
 	//lecture des bits
 	for(size_t i = 0; i < bits.size(); i+=8)
@@ -165,7 +165,7 @@ void BlueFile::suppression()
 {
 	fichier_lecture->close();
 	
-	if(remove(nom_lecture.c_str()) != 0)
+	if(remove(("" DOSSIER_EFFECTIF "/" +  nom_lecture).c_str()) != 0)
 		cout << "Impossibilite de supprimer le fichier d'origine" << endl;
 	else
 		cout << "Fichier d'origine supprime" << endl;
@@ -174,12 +174,18 @@ void BlueFile::suppression()
 //Choisis le nom des fichiers
 void BlueFile::creerNomsFichiers()
 {
-	nom_lecture = "" DOSSIER_EFFECTIF "/" + nom_fichier;
-	nom_ecriture = "" DOSSIER_EFFECTIF "/" + nom_fichier;
+	nom_lecture =  nom_fichier;
+	nom_ecriture =  nom_fichier;
 	if(cryptage)
 		nom_ecriture += ".bluecrypt";
 	if(decryptage)
 		nom_ecriture = nom_ecriture.substr(0, nom_ecriture.size() - (sizeof(".bluecrypt") - 1));
+}
+
+//Renvoit le nom du fichier créé
+string BlueFile::getNewName()
+{
+	return nom_ecriture;
 }
 
 //Whiax
