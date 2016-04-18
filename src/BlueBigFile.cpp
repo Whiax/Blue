@@ -1,13 +1,13 @@
 #include "../include/BlueBigFile.h"
 
 //Constructeur
-BlueBigFile::BlueBigFile(vector<string>& liste_fichiers, vector<char>& cle_cryptage) 
-	: cle_cryptage(cle_cryptage), liste_fichiers(&liste_fichiers), cle_decryptage(cle_cryptage)
+BlueBigFile::BlueBigFile(vector<string>& liste_fichiers, vector<char>& cle_chiffrement) 
+	: cle_chiffrement(cle_chiffrement), liste_fichiers(&liste_fichiers), cle_dechiffrement(cle_chiffrement)
 { }
 
 
-BlueBigFile::BlueBigFile(vector<char>& cle_decryptage) 
-	: cle_decryptage(cle_decryptage), cle_cryptage(cle_decryptage)
+BlueBigFile::BlueBigFile(vector<char>& cle_dechiffrement) 
+	: cle_dechiffrement(cle_dechiffrement), cle_chiffrement(cle_dechiffrement)
 { }
 
 //Génération du gros fichier
@@ -20,7 +20,7 @@ void BlueBigFile::generer()
 	vector<string>& fichiers = *liste_fichiers;
 	
 	//1: Ouverture/Création du fichier
-	ofstream fichier_principal("" DOSSIER_EFFECTIF "/" "main.blueroom", ios::binary);
+	ofstream fichier_principal("" DOSSIER_EFFECTIF "/" "archive.blueroom", ios::binary);
 
 	//2: Enregistrer le nombre de fichier
 	donnee = to_string(fichiers.size());
@@ -89,7 +89,7 @@ vector<string> BlueBigFile::degenerer()
 	ofstream fichier;
 
 	// 1: Ouverture du fichier
-	ifstream fichier_principal("" DOSSIER_EFFECTIF "/" "main.blueroom", ios::binary);
+	ifstream fichier_principal("" DOSSIER_EFFECTIF "/" "archive.blueroom", ios::binary);
 
 	//2: Lire le nombre de fichier
 	fichier_principal >> nb_fichiers;
@@ -148,7 +148,7 @@ vector<string> BlueBigFile::degenerer()
 	fichier_principal.close();
 
 	//8: Supprimer le fichier principal
-	if(remove("" DOSSIER_EFFECTIF "/" "main.blueroom") != 0)
+	if(remove("" DOSSIER_EFFECTIF "/" "archive.blueroom") != 0)
 		cout << "Impossibilite de supprimer le fichier d'origine" << endl;
 	else
 		cout << "Fichier d'origine supprime" << endl;

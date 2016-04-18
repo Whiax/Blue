@@ -1,10 +1,10 @@
 #include "../include/BlueFile.h"
 
 //Prépare pour la lecture
-BlueFile::BlueFile(string nom_fichier, bool cryptage, bool decryptage, vector<char>& cle_cryptage, vector<char>& cle_decryptage)
-	: nom_fichier(nom_fichier), cryptage(cryptage), decryptage(decryptage), cle_cryptage(cle_cryptage), cle_decryptage(cle_decryptage)
+BlueFile::BlueFile(string nom_fichier, bool chiffrement, bool dechiffrement, vector<char>& cle_chiffrement, vector<char>& cle_dechiffrement)
+	: nom_fichier(nom_fichier), chiffrement(chiffrement), dechiffrement(dechiffrement), cle_chiffrement(cle_chiffrement), cle_dechiffrement(cle_dechiffrement)
 {
-	//cryptage 
+	//chiffrement 
 	bits.reserve(TAILLE_BLOC_OCTET);
 
 	determineTaille();
@@ -13,8 +13,8 @@ BlueFile::BlueFile(string nom_fichier, bool cryptage, bool decryptage, vector<ch
 	fichier_ecriture = NULL;
 
 	cout << "__________/_\\__________" << endl;
-	if(decryptage) cout << "DE";
-	cout << "CRYPTAGE DE " << nom_fichier << endl;
+	if(dechiffrement) cout << "DE";
+	cout << "CHIFFREMENT DE " << nom_fichier << endl;
 	cout << "TAILLE: " << taille << endl << endl;
 
 	//noms des fichiers sources et destination
@@ -61,7 +61,7 @@ void BlueFile::lireBinaire()
 	passage++;
 }
 
-//Détecte si le fichier a fini d'être crypté
+//Détecte si le fichier a fini d'être chiffré
 int BlueFile::procedureFinie()
 {
 	int position = (int)fichier_lecture->tellg();
@@ -80,12 +80,12 @@ int BlueFile::procedureFinie()
 	else return 0;
 }
 
-//Crypte l'ensemble des bits courants
-void BlueFile::crypter()
+//chiffre l'ensemble des bits courants
+void BlueFile::chiffrer()
 {
 	//si on a pas de cles de chiffrement
-	if(cle_cryptage.size() == 0)
-		//cryptage basique: inverser les bits deux à deux
+	if(cle_chiffrement.size() == 0)
+		//chiffrement basique: inverser les bits deux à deux
 		for(size_t i = 0; i < bits.size() -1; i+=2)
 		{
 			char c1 = bits[i];
@@ -93,17 +93,17 @@ void BlueFile::crypter()
 			bits[i + 1] = c1;
 		}
 	//sinon
-	else //cryptage basique d'inversion de valeur de bit
+	else //chiffrement basique d'inversion de valeur de bit
 		for(size_t i = 0; i < bits.size(); ++i)
-			bits[i] = cle_cryptage[i % cle_cryptage.size()] ? !bits[i] : bits[i];
+			bits[i] = cle_chiffrement[i % cle_chiffrement.size()] ? !bits[i] : bits[i];
 }
 
-//Décrypte l'ensemble des bits courants
-void BlueFile::decrypter()
+//Déchiffre l'ensemble des bits courants
+void BlueFile::dechiffrer()
 {
 	//si on a pas de cles de chiffrement
-	if(cle_decryptage.size() == 0)
-		//décryptage basique: inverser les bits deux à deux
+	if(cle_dechiffrement.size() == 0)
+		//déchiffrement basique: inverser les bits deux à deux
 		for(size_t i = 0; i < bits.size() - 1; i+=2)
 		{
 			char c1 = bits[i];
@@ -111,18 +111,18 @@ void BlueFile::decrypter()
 			bits[i + 1] = c1;
 		}
 	//sinon
-	else //decryptage basique d'inversion de valeur de bit
+	else //dechiffrement basique d'inversion de valeur de bit
 		for(size_t i = 0; i < bits.size(); ++i)
-			bits[i] = cle_decryptage[i % cle_decryptage.size()] ? !bits[i] : bits[i];
+			bits[i] = cle_dechiffrement[i % cle_dechiffrement.size()] ? !bits[i] : bits[i];
 }
 
 //Opère l'opération souhaitée
 void BlueFile::operer()
 {
-	if(cryptage)
-		crypter();
-	if(decryptage)
-		decrypter();
+	if(chiffrement)
+		chiffrer();
+	if(dechiffrement)
+		dechiffrer();
 }
 
 //Réécris l'ensemble des bits courants dans le fichier en binaire 
@@ -176,9 +176,9 @@ void BlueFile::creerNomsFichiers()
 {
 	nom_lecture =  nom_fichier;
 	nom_ecriture =  nom_fichier;
-	if(cryptage)
+	if(chiffrement)
 		nom_ecriture += ".bluecrypt";
-	if(decryptage)
+	if(dechiffrement)
 		nom_ecriture = nom_ecriture.substr(0, nom_ecriture.size() - (sizeof(".bluecrypt") - 1));
 }
 

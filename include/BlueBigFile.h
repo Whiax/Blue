@@ -6,8 +6,8 @@ class BlueBigFile
 {
 public:
 	//Constructeurs
-	BlueBigFile(vector<string>& liste_fichiers, vector<char>& cle_cryptage);
-	BlueBigFile(vector<char>& cle_decryptage);
+	BlueBigFile(vector<string>& liste_fichiers, vector<char>& cle_chiffrement);
+	BlueBigFile(vector<char>& cle_dechiffrement);
 
 	//Génération du gros fichier
 	void generer();
@@ -18,10 +18,10 @@ public:
 private:
 	//Chiffrement
 	vector<string>* liste_fichiers;
-	vector<char>& cle_cryptage;
+	vector<char>& cle_chiffrement;
 
 	//Dechiffrement
-	vector<char>& cle_decryptage;
+	vector<char>& cle_dechiffrement;
 
 
 };

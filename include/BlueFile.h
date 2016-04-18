@@ -8,7 +8,7 @@ class BlueFile
 {
 public:
 	//Prépare pour la lecture
-	BlueFile(string nom_fichier, bool cryptage, bool decryptage, vector<char>& cle_cryptage, vector<char>& cle_decryptage);
+	BlueFile(string nom_fichier, bool chiffrement, bool dechiffrement, vector<char>& cle_chiffrement, vector<char>& cle_dechiffrement);
 
 	//Détruit les données
 	~BlueFile();
@@ -16,11 +16,11 @@ public:
 	//Lecture en binaire d'un fichier
 	void lireBinaire();
 
-	//Crypte l'ensemble des bits
-	void crypter();
+	//chiffre l'ensemble des bits
+	void chiffrer();
 
-	//Décrypte l'ensemble des bits
-	void decrypter();
+	//Déchiffre l'ensemble des bits
+	void dechiffrer();
 
 	//Opère l'opération souhaitée
 	void operer();
@@ -28,7 +28,7 @@ public:
 	//Réécris le fichier en binaire
 	void ecrireBinaire();
 
-	//Détecte si le fichier a fini d'être crypté
+	//Détecte si le fichier a fini d'être chiffré
 	int procedureFinie();
 
 	//Affiche les bits
@@ -61,10 +61,10 @@ private:
 	string nom_ecriture;
 
 	//Opération
-	bool cryptage;
-	bool decryptage;
-	vector<char>& cle_cryptage;
-	vector<char>& cle_decryptage;
+	bool chiffrement;
+	bool dechiffrement;
+	vector<char>& cle_chiffrement;
+	vector<char>& cle_dechiffrement;
 
 	//Analyse
 	int passage;

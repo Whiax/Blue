@@ -43,10 +43,10 @@ void afficherInstructions()
 	cout << "_________" << endl;
 	cout << "INSTRUCTIONS" << endl;
 	cout << "- L'ensemble des fichiers a la racine du fichier contenant le logiciel seront affectes" << endl;
-	cout << "- Pour crypter les fichiers, mettez un fichier bluedoor.txt contenant la cle de codage" << endl;
-	cout << "- Pour decrypter les fichiers, mettez un fichier bluekey.txt contenant la cle de decodage" << endl;
+	cout << "- Pour chiffrer les fichiers, mettez un fichier bluedoor.txt contenant la cle de codage" << endl;
+	cout << "- Pour dechiffrer les fichiers, mettez un fichier bluekey.txt contenant la cle de decodage" << endl;
 	cout << "- Les fichiers subiront quoiqu'il arrive les instructions de codage ou decodage" << endl;
-	cout << "- Il est donc important de ne crypter que les fichiers non cryptes et de ne decrypter que les fichiers cryptes" << endl;
+	cout << "- Il est donc important de ne chiffrer que les fichiers non chiffres et de ne dechiffrer que les fichiers chiffres" << endl;
 	cout << "FIN INSTRUCTIONS" << endl;
 	cout << "_________" << endl;
 	cout << endl << endl;
@@ -110,44 +110,44 @@ void main()
 {
 	
 
-	//Recupère les fichiers à crypter/decrypter
+	//Recupère les fichiers à chiffrer/dechiffrer
 	vector<string> fichiers = listeFichier();
 
-	//Cherche à savoir s'il faut crypter ou decrypter
+	//Cherche à savoir s'il faut chiffrer ou dechiffrer
 	vector<string>::iterator position_door = find(fichiers.begin(), fichiers.end(), "bluedoor.txt");
 	vector<string>::iterator position_key = find(fichiers.begin(), fichiers.end(), "bluekey.txt");
-	bool crypter = position_door != fichiers.end();
-	bool decrypter = position_key != fichiers.end();
+	bool chiffrer = position_door != fichiers.end();
+	bool dechiffrer = position_key != fichiers.end();
 
 	//Récupère les clés de chiffrement
-	vector<vector<char>> cles = recupererCle(crypter ? *position_door : "", decrypter ? *position_key : "");
+	vector<vector<char>> cles = recupererCle(chiffrer ? *position_door : "", dechiffrer ? *position_key : "");
 	
 	//Supprime les fichiers door et key de la liste des fichiers
-	if(crypter)
+	if(chiffrer)
 		fichiers.erase(position_door);
-	if(decrypter)
+	if(dechiffrer)
 		fichiers.erase(position_key);
 
 	//Si aucun des fichiers n'est present
-	if(!crypter && !decrypter)
+	if(!chiffrer && !dechiffrer)
 		afficherInstructions();
 
 
 	
 
-	//Sinon Crypte/Decrypte la liste de fichier
+	//Sinon chiffre/Dechiffre la liste de fichier
 	else
 	{
-		//Si on souhaite décrypter, on commence par dégrouper les .bluecrypt
-		if(decrypter)
+		//Si on souhaite déchiffrer, on commence par dégrouper les .bluecrypt
+		if(dechiffrer)
 		{
 			BlueBigFile big_file(cles[1]);
 			vector<string> nouveaux_bluecrypt = big_file.degenerer();
 			fichiers.insert(fichiers.end(), nouveaux_bluecrypt.begin(), nouveaux_bluecrypt.end());
 		}
 
-		//Si on souhaite décrypter des fichiers, on ne décrypte que les .bluecrypt
-		if(decrypter)
+		//Si on souhaite déchiffrer des fichiers, on ne déchiffre que les .bluecrypt
+		if(dechiffrer)
 		{
 			for(int i = fichiers.size() - 1; i >= 0; --i)
 			{
@@ -162,7 +162,7 @@ void main()
 		for(size_t i = 0; i < fichiers.size(); i++)
 		{
 			string nom_fichier = fichiers[i];
-			BlueFile fichier(nom_fichier, crypter, decrypter, cles[0], cles[1]);
+			BlueFile fichier(nom_fichier, chiffrer, dechiffrer, cles[0], cles[1]);
 			do
 			{
 				fichier.lireBinaire();
@@ -171,14 +171,14 @@ void main()
 			} while(!fichier.procedureFinie());
 			fichier.suppression();
 			
-			//Si on crypte, on enregistre les nouveaux noms de fichiers
-			if(crypter)
+			//Si on chiffre, on enregistre les nouveaux noms de fichiers
+			if(chiffrer)
 				nouveaux_noms.push_back(fichier.getNewName());
 
 		}
 
-		//Si on crypte on met tout dans un seul fichier
-		if(crypter)
+		//Si on chiffre on met tout dans un seul fichier
+		if(chiffrer)
 		{
 			BlueBigFile big_file(nouveaux_noms, cles[0]);
 			big_file.generer();
